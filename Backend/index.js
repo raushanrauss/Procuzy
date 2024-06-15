@@ -7,14 +7,14 @@ app.use(express.json());
 let articles = [];
 
 async function scrapeMedium(topic) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
 
-    // Navigate to Medium's search page for the given topic
-    await page.goto(`https://medium.com/search?q=${topic}`);
+        // Navigate to Medium's search page for the given topic
+        await page.goto(`https://medium.com/search?q=${topic}`);
 
-    // Function to extract article details from a single page
-    async function scrapePage() {
+        // Function to extract article details from a single page
         const articleNodes = await page.evaluate(() => {
             const nodes = document.querySelectorAll('div.postArticle');
             return Array.from(nodes).map(node => ({
@@ -25,17 +25,14 @@ async function scrapeMedium(topic) {
             }));
         });
 
+        // Close the browser
+        await browser.close();
+
         return articleNodes;
+    } catch (error) {
+        console.error('Error during scraping:', error);
+        throw error;
     }
-
-    // Scrape the current page
-    let newArticles = await scrapePage();
-    articles = articles.concat(newArticles);
-
-    // Close the browser
-    await browser.close();
-
-    return newArticles;
 }
 
 // POST /scrape endpoint
@@ -47,7 +44,8 @@ app.post('/scrape', async (req, res) => {
 
     try {
         const scrapedArticles = await scrapeMedium(topic);
-        res.json({ message: 'Scraping successful', articles: scrapedArticles });
+        articles = articles.concat(scrapedArticles);
+        res.json({ message: 'Scraping successful', articles: articles });
     } catch (error) {
         console.error('Error during scraping:', error);
         res.status(500).json({ error: 'Internal server error' });
