@@ -12,7 +12,7 @@ function App() {
   const handleSubmit = async (topic: string) => {
     setLoading(true);
     try {
-      const response = await fetch('/scrape', {
+      const response = await fetch('http://localhost:3000/scrape', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,27 +1,32 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
-
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 let articles = [];
 
 async function scrapeMedium(topic) {
+
     try {
+        console.log(topic);
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
         // Navigate to Medium's search page for the given topic
-        await page.goto(`https://medium.com/search?q=${topic}`);
-
+        await page.goto(`https://medium.com/search?q=${topic}`,{waitUntil:"domcontentloaded"});
+       
         // Function to extract article details from a single page
-        const articleNodes = await page.evaluate(() => {
-            const nodes = document.querySelectorAll('div.postArticle');
+        const articleNodes = await page.evaluate((el) => {
+           
+            const nodes = document.querySelectorAll('article');
+            console.log(nodes);
             return Array.from(nodes).map(node => ({
-                title: node.querySelector('h3').innerText,
-                author: node.querySelector('a.ds-link').innerText,
-                publicationDate: node.querySelector('time').getAttribute('datetime'),
-                url: node.querySelector('a.postArticle-content').getAttribute('href')
+                title: node.querySelector('h2') ?.innerText, 
+                author: node.querySelector('a>p').innerText,
+                content: node.querySelector('h3').innerText,
+                url: node.querySelector('.bg.l > div ').getAttribute('data-href')
             }));
         });
 
@@ -43,9 +48,11 @@ app.post('/scrape', async (req, res) => {
     }
 
     try {
+        console.log("check");
         const scrapedArticles = await scrapeMedium(topic);
+
         articles = articles.concat(scrapedArticles);
-        res.json({ message: 'Scraping successful', articles: articles });
+        res.json({ message: 'Scraping successful', articles: scrapedArticles });
     } catch (error) {
         console.error('Error during scraping:', error);
         res.status(500).json({ error: 'Internal server error' });
