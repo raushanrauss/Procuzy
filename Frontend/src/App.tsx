@@ -6,7 +6,7 @@ import ArticleList from './Components/ArticleList';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState([]);
   const [error, setError] = useState<string>('');
 
   const handleSubmit = async (topic: string) => {
@@ -32,8 +32,8 @@ function App() {
       setArticles(data.articles.slice(0, 5)); // Display top 5 articles
       setError('');
     } catch (error) {
-      setError(error.message);
-      alert(error.message); // Display error message in an alert
+      setError("Error occurred while fetching articles");
+      alert("Error occurred while fetching articles"); // Display error message in an alert
     } finally {
       setLoading(false);
     }
