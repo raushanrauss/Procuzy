@@ -2,7 +2,16 @@
 ## Folder Structure
 ```bash
 
-Figma-Design/
+Procuzy/
+├── backend/
+│   └── .gitignore
+│   └── .prettierrc
+│   ├── api/
+│   │   └── index.js
+│   └── db.json
+│   └── package-lock.json
+│   └── package.json
+│   └── vercel.json
 Frontend
 ├── public/
 ├── src/
@@ -21,9 +30,13 @@ Frontend
 ```
 ## Deploye Link
 - https://procuzy-racw.vercel.app/
-  ## Run this Commant to start the Frontend locally.
+## If deployee link is not working , run locally.
+
+  ## Run this Command to start the Frontend locally.
+  - cd Frontend
   - npm run start
 
-    ## Run this Commant to start the Backend locally.
+    ## Run this Command to start the Backend locally.
+   - cd Backend
   - npm run server
 
