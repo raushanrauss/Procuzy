@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(cors())
 
 let articles = [];
-
+console.log(articles)
 async function scrapeMedium(topic) {
 
     try {
@@ -25,7 +25,7 @@ async function scrapeMedium(topic) {
             return Array.from(nodes).map(node => ({
                 title: node.querySelector('h2') ?.innerText, 
                 author: node.querySelector('a>p').innerText,
-                content: node.querySelector('h3').innerText,
+                publishedDate: node.querySelector('span').innerText,
                 url: node.querySelector('.bg.l > div ').getAttribute('data-href')
             }));
         });
