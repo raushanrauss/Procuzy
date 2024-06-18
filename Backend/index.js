@@ -11,7 +11,7 @@ async function scrapeMedium(topic) {
 
     try {
         console.log(topic);
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({headless:2});
         const page = await browser.newPage();
 
         // Navigate to Medium's search page for the given topic
