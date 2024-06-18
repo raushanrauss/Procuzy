@@ -20,10 +20,10 @@ Frontend
 └── tailwind.config.js
 ```
 ## Deploye Link
-- https://procuzy-phi.vercel.app/
-  ## Run this Commant to start the Frontend.
+- https://procuzy-racw.vercel.app/
+  ## Run this Commant to start the Frontend locally.
   - npm run start
 
-    ## Run this Commant to start the Backend.
+    ## Run this Commant to start the Backend locally.
   - npm run server
 
