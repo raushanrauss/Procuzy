@@ -6,13 +6,13 @@ import ArticleList from './Components/ArticleList';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [articles, setArticles] = useState([]); // Adjust type according to your Article interface
+  const [articles, setArticles] = useState([]); 
   const [error, setError] = useState<string>('');
 
   const handleSubmit = async (topic: string) => {
     setLoading(true);
     try {
-      const response = await fetch('https://procuzy-1-egu6.onrender.com/scrape', {
+      const response = await fetch('https://procuzy-4-idtb.onrender.com/scrape', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,11 +29,11 @@ function App() {
         throw new Error('No articles found for the topic');
       }
 
-      setArticles(data.articles.slice(0, 10)); // Display top 5 articles
+      setArticles(data.articles.slice(0, 10));
       setError('');
     } catch (error) {
       setError('Error occurred while fetching articles');
-      alert('Error occurred while fetching articles'); // Display error message in an alert
+      alert('Error occurred while fetching articles');
     } finally {
       setLoading(false);
     }

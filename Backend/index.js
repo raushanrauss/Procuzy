@@ -11,26 +11,26 @@ async function scrapeMedium(topic) {
 
     try {
         console.log(topic);
-        const browser = await puppeteer.launch({headless:2});
+        const browser = await puppeteer.launch({ headless: 2 });
         const page = await browser.newPage();
 
-        // Navigate to Medium's search page for the given topic
-        await page.goto(`https://medium.com/search?q=${topic}`,{waitUntil:"domcontentloaded"});
-       
-        // Function to extract article details from a single page
+
+        await page.goto(`https://medium.com/search?q=${topic}`, { waitUntil: "domcontentloaded" });
+
+
         const articleNodes = await page.evaluate((el) => {
-           
+
             const nodes = document.querySelectorAll('article');
             console.log(nodes);
             return Array.from(nodes).map(node => ({
-                title: node.querySelector('h2') ?.innerText, 
+                title: node.querySelector('h2')?.innerText,
                 author: node.querySelector('a>p').innerText,
                 publishedDate: node.querySelector('span').innerText,
                 url: node.querySelector('.bg.l > div ').getAttribute('data-href')
             }));
         });
 
-        // Close the browser
+
         await browser.close();
 
         return articleNodes;
@@ -40,7 +40,7 @@ async function scrapeMedium(topic) {
     }
 }
 
-// POST /scrape endpoint
+
 app.post('/scrape', async (req, res) => {
     const { topic } = req.body;
     if (!topic) {
@@ -59,12 +59,12 @@ app.post('/scrape', async (req, res) => {
     }
 });
 
-// GET /articles endpoint
+
 app.get('/articles', (req, res) => {
     res.json(articles);
 });
 
-// Start the server
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
